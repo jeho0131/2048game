@@ -12,6 +12,7 @@ array = [[0 for i in range(4)] for j in range(4)]
 spawn = [2,2,2,2,4]
 
 #numF = pygame.font.SysFont(None, 200)
+numImage = []
 image2 = pygame.image.load("2.png").convert()
 image4 = pygame.image.load("4.png").convert()
 
