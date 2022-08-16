@@ -26,47 +26,75 @@ def Start():
 
     DrawMap()
 
-def Move(rc, s, e, d):
+def CheckFill(rc, n):
+    if rc == 0:
+        for i in range(4):
+            if array[n][i] == 0:
+                return True
+        return False
+
+    if rc == 1:
+        for i in range(4):
+            if array[i][n] == 0:
+                return True
+        return False
+
+def Move(rc, s, d):
     x = 0
     y = 0
+    count = 4
     
     if rc == 0:
         for i in range(4):
             y = i
             x = s
-            for j in range(2):
-                if array[y][x] != 0:
-                    while(array[y][x + d] == 0 and x != e):
-                        array[y][x + d] = array[y][x]
-                        array[y][x] = 0
-                        x = x + d
-                x = s + (d * -1 * j)
+            if CheckFill(0, i):
+                for j in range(3):
+                    if array[y][x] == 0:
+                        for m in range(1, count):
+                            if array[y][x + d*m] != 0:
+                                array[y][x] = array[y][x + d*m]
+                                array[y][x + d*m] = 0
+                                break
+                    x = x + d
+                    count -= 1
+            count = 4
                           
     elif rc == 1:
         for i in range(4):
             x = i
             y = s
-            for j in range(1, 3):
-                if array[y][x] != 0:
-                    while(array[y + d][x] == 0 and y != e):
-                        array[y + d][x] = array[y][x]
-                        array[y][x] = 0
-                        y = y + d
-                y = s + (d * -1 * j)
-    
+            if CheckFill(1, i):
+                for j in range(3):
+                    if array[y][x] == 0:
+                        for m in range(1, count):
+                            if array[y + d*m][x] != 0:
+                                array[y][x] = array[y + d*m][x]
+                                array[y + d*m][x] = 0
+                                break
+                    y = y + d
+                    count -= 1
+            count = 4
+                    
 Start()
 
 while True:
-    '''if keyboard.is_pressed(80):
-        Move(0, 1, 0, -1)
+    if keyboard.is_pressed(75): #left
+        Move(0, 0, 1)
+        SpawnNumber(random.choice(spawn))
+        DrawMap()
 
-    if event.key == pygame.K_RIGHT:
-        Move(0, 2, 3, 1)'''
-
+    if keyboard.is_pressed(77): #right
+        Move(0, 3, -1)
+        SpawnNumber(random.choice(spawn))
+        DrawMap()
+    
     if keyboard.is_pressed(72): #up
-        Move(1, 1, 0, -1)
+        Move(1, 0, 1)
+        SpawnNumber(random.choice(spawn))
         DrawMap()
 
     if keyboard.is_pressed(80): #down
-        Move(1, 2, 3, 1)
+        Move(1, 3, -1)
+        SpawnNumber(random.choice(spawn))
         DrawMap()
