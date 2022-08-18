@@ -1,7 +1,7 @@
 import keyboard, random
 
 array = [[0 for i in range(4)] for j in range(4)]
-spawn = [2,2,2,2,4]
+spawn = [2,2,2,4]
 
 def SpawnNumber(n):
     x = random.randint(0, 3)
@@ -13,12 +13,13 @@ def SpawnNumber(n):
         array[y][x] = n
 
 def DrawMap():
+    print("")
     for i in range(4):
         for j in range(4):
-            print(array[i][j], end=" ")
-        print("")
+            print(array[i][j], end="\t")
+        print("\n")
 
-    print("\n")
+    print("-----------------------------------")
 
 def Start():
     SpawnNumber(2)
@@ -39,6 +40,12 @@ def CheckFill(rc, n):
                 return True
         return False
 
+def CombineNum(x,y, cx, cy):
+    global array
+    
+    array[cy][cx] *= 2
+    array[y][x] = 0
+
 def Move(rc, s, d):
     x = 0
     y = 0
@@ -52,10 +59,14 @@ def Move(rc, s, d):
                 for j in range(3):
                     if array[y][x] == 0:
                         for m in range(1, count):
+                            if array[y][x + d*m] == array[y][x + d*m -d] and array[y][x + d*m] != 0:
+                                CombineNum(x + d*m, y, x + d*m-d, y)
+                                
                             if array[y][x + d*m] != 0:
                                 array[y][x] = array[y][x + d*m]
                                 array[y][x + d*m] = 0
                                 break
+                                
                     x = x + d
                     count -= 1
             count = 4
@@ -68,10 +79,14 @@ def Move(rc, s, d):
                 for j in range(3):
                     if array[y][x] == 0:
                         for m in range(1, count):
+                            if array[y + d*m][x] == array[y + d*m -d][x] and array[y + d*m][x] != 0:
+                                CombineNum(x, y + d*m, x, y + d*m -d)
+                                
                             if array[y + d*m][x] != 0:
                                 array[y][x] = array[y + d*m][x]
                                 array[y + d*m][x] = 0
                                 break
+                                
                     y = y + d
                     count -= 1
             count = 4
