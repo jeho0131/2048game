@@ -55,40 +55,36 @@ def Move(rc, s, d):
         for i in range(4):
             y = i
             x = s
-            if CheckFill(0, i):
-                for j in range(3):
-                    if array[y][x] == 0:
-                        for m in range(1, count):
-                            if array[y][x + d*m] == array[y][x + d*m -d] and array[y][x + d*m] != 0:
-                                CombineNum(x + d*m, y, x + d*m-d, y)
+            for j in range(3):
+                if array[y][x] == 0:
+                    for m in range(1, count):
+                        if array[y][x + d*m] != 0:
+                            array[y][x] = array[y][x + d*m]
+                            array[y][x + d*m] = 0
+                            if x != s and array[y][x] == array[y][x-d]:
+                                CombineNum(x, y, x-d, y)
+                            break
                                 
-                            if array[y][x + d*m] != 0:
-                                array[y][x] = array[y][x + d*m]
-                                array[y][x + d*m] = 0
-                                break
-                                
-                    x = x + d
-                    count -= 1
+                x = x + d
+                count -= 1
             count = 4
                           
     elif rc == 1:
         for i in range(4):
             x = i
             y = s
-            if CheckFill(1, i):
-                for j in range(3):
-                    if array[y][x] == 0:
-                        for m in range(1, count):
-                            if array[y + d*m][x] == array[y + d*m -d][x] and array[y + d*m][x] != 0:
-                                CombineNum(x, y + d*m, x, y + d*m -d)
+            for j in range(3):
+                if array[y][x] == 0:
+                    for m in range(1, count):
+                        if array[y + d*m][x] != 0:
+                            array[y][x] = array[y + d*m][x]
+                            array[y + d*m][x] = 0
+                            if y != s and array[y][x] == array[y-d][x]:
+                                CombineNum(x, y, x, y-d)
+                            break
                                 
-                            if array[y + d*m][x] != 0:
-                                array[y][x] = array[y + d*m][x]
-                                array[y + d*m][x] = 0
-                                break
-                                
-                    y = y + d
-                    count -= 1
+                y = y + d
+                count -= 1
             count = 4
                     
 Start()
