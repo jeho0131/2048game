@@ -50,19 +50,28 @@ def Move(rc, s, d):
     x = 0
     y = 0
     count = 4
+    cn = 0
     
     if rc == 0:
         for i in range(4):
             y = i
             x = s
+            for a in range(3):
+                if array[y][x+d*a] == array[y][x+d*a+d]:
+                    cn += 1
+                    CombineNum(x+d*a, y, x+d*a+d, y)
             for j in range(3):
                 if array[y][x] == 0:
                     for m in range(1, count):
                         if array[y][x + d*m] != 0:
+                            cn += 1
                             array[y][x] = array[y][x + d*m]
                             array[y][x + d*m] = 0
                             if x != s and array[y][x] == array[y][x-d]:
                                 CombineNum(x, y, x-d, y)
+                                x -= d
+                                count += 1
+                                j -= 1
                             break
                                 
                 x = x + d
@@ -73,39 +82,46 @@ def Move(rc, s, d):
         for i in range(4):
             x = i
             y = s
+            for a in range(3):
+                if array[y+d*a][x] == array[y+d*a+d][x]:
+                    cn += 1
+                    CombineNum(x, y+d*a, x, y+d*a+d)
             for j in range(3):
                 if array[y][x] == 0:
                     for m in range(1, count):
                         if array[y + d*m][x] != 0:
+                            cn += 1
                             array[y][x] = array[y + d*m][x]
                             array[y + d*m][x] = 0
                             if y != s and array[y][x] == array[y-d][x]:
                                 CombineNum(x, y, x, y-d)
+                                y -= d
+                                count += 1
+                                j -= 1
                             break
                                 
                 y = y + d
                 count -= 1
             count = 4
+
+    if cn != 0:
+        SpawnNumber(random.choice(spawn))
                     
 Start()
 
 while True:
     if keyboard.is_pressed(75): #left
         Move(0, 0, 1)
-        SpawnNumber(random.choice(spawn))
         DrawMap()
 
     if keyboard.is_pressed(77): #right
         Move(0, 3, -1)
-        SpawnNumber(random.choice(spawn))
         DrawMap()
     
     if keyboard.is_pressed(72): #up
         Move(1, 0, 1)
-        SpawnNumber(random.choice(spawn))
         DrawMap()
 
     if keyboard.is_pressed(80): #down
         Move(1, 3, -1)
-        SpawnNumber(random.choice(spawn))
         DrawMap()
